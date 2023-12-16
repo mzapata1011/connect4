@@ -1,0 +1,17 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "maven.terminal.favorites": [
+        {
+            "command": "tomcat7:run",
+            "debug": false
+        },
+        {
+            "command": "tomcat7:shutdown",
+            "debug": false
+        },
+        {
+            "command": "compile",
+            "debug": false
+        }
+    ]
+}

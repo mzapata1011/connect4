@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
+  <title>Hello World 1.2.4</title>
+</head>
+
+<body>
+
+  <h1>Hello, World!</h1>
+  <!-- <button onclick="navigateToPage('tablero.html')">Go to Page 2</button> -->
+  <!-- <button id="Juego">Press Me</button> -->
+  <!-- Button to trigger the page navigation -->
+  <button id="navigateButton">Partida prueba: </button>
+  <br>
+  <button id="IniciarSesion"> Iniciar sesion:</button>
+
+  <script>
+    document.getElementById(`navigateButton`).addEventListener(`click`, function(){
+      window.location.href='nextPage.html';
+    })
+    var login=document.getElementById('IniciarSesion');
+    console.log(login);
+    document.getElementById(`IniciarSesion`).addEventListener(`click`, function(){
+      window.location.href='login.html';
+    })
+
+  </script>
+  
+
+</body>
+
+</html>
