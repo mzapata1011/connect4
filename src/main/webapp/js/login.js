@@ -52,6 +52,6 @@ function register() {
     })
     .catch(error => {
         console.error('Fetch error:', error);
-    });
+    })
 
-}
+};

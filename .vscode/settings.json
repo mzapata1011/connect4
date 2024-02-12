@@ -12,6 +12,11 @@
         {
             "command": "compile",
             "debug": false
+        },
+        {
+            "command": "clean build",
+            "debug": false
         }
-    ]
+    ],
+    "maven.view": "hierarchical"
 }

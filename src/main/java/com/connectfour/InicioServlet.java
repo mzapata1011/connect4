@@ -31,6 +31,7 @@ public class InicioServlet extends HttpServlet {
     HttpSession session = request.getSession(true);
 
     String username = (String) session.getAttribute("username");
+    System.out.println("username= "+username);
     if (username == null) {
       session.setAttribute("username", "guest");
       username = (String) session.getAttribute("username");
@@ -44,67 +45,39 @@ public class InicioServlet extends HttpServlet {
           );
         statement = conexion.createStatement();
         
-        SQL =
-          "SELECT board.game, board.number, board.player FROM board \n" + //
-          "LEFT JOIN(games CROSS JOIN users)\n" + //
-          "ON (board.game = games.game_id AND games.player_one=users.user_id \n" + //
-          "OR board.game=games.game_id AND games.player_two=users.user_id)\n" + //
-          "WHERE username='"+username+ "' \n" +
-          "ORDER BY board.game, board.number;";  //Conectar usuario al nombre de usuario del jugador
+        SQL = "SELECT game_id, player_one, player_two, turn " +
+        "FROM games " +
+        "INNER JOIN users ON (player_one = user_id) OR (player_two = user_id) " +
+        "WHERE username = '" + username + "'";
+
         rs = statement.executeQuery(SQL);
-
-        HashMap<String, String> boardMap = new HashMap<String, String>();
         ArrayList<Integer> partidas = new ArrayList<Integer>();
-        int numeroPartidas = 0;
+        ArrayList<Boolean> turnos = new ArrayList<Boolean>();
         
-        String color;
-        while (rs.next()) {
-          if (partidas.isEmpty()) {
-            numeroPartidas++;
-            partidas.add(rs.getInt(1));
-          } else if (partidas.get(numeroPartidas - 1) != rs.getInt(1)) {
-            usuario.put(
-              String.valueOf(partidas.get(numeroPartidas - 1)),
-              boardMap
-            );
-            session.setAttribute(String.valueOf(partidas.get(numeroPartidas-1)), new JSONObject(boardMap));
-            boardMap.clear();
-            
-            numeroPartidas++;
-            partidas.add(rs.getInt(1));
-          }
-          color = (rs.getInt(3) == 1) ? "blue" : "red";
-          boardMap.put(rs.getString(2), color);
-        }
 
-        usuario.put(String.valueOf(partidas.get(numeroPartidas - 1)), boardMap);
-        session.setAttribute(String.valueOf(partidas.get(numeroPartidas-1)), new JSONObject(boardMap));
-        boardMap.clear();
-        usuario.put("partidas", partidas);
-        session.setAttribute("numero de Partidas", numeroPartidas);
-        session.setAttribute("partidas", partidas);
-        usuario.put("numero de partidas",numeroPartidas);
+        while(rs.next()){
+          partidas.add(rs.getInt(1));
+          boolean condition = (rs.getString(2).equals("1")) ? (rs.getInt(4) == 1) : (rs.getInt(4) == 0);
+          turnos.add(condition);
+        }
+        System.out.print("partidas: ");
+        System.out.println(partidas);
+        System.out.print("turnos: ");
+        System.out.println(turnos);
+        
+        usuario.put("partidas",partidas);
+        usuario.put("turno",turnos);
+
       } catch (Exception e) {
 
         System.out.println(e);
       }
     }
     usuario.put("username", username);
-    
+    System.out.print("USUARIO: ");
+    System.out.println(usuario);
     response.setContentType("application/json");
     response.setCharacterEncoding("ASCII");
-
-
     response.getWriter().write(usuario.toString());
-    // System.out.println("username= " + username);
-    // // Convert session data to JSON
-    // String jsonData = "{ \"username\": \"" + username + "\" }";
-
-    // // Set content type to JSON
-    // response.setContentType("application/json");
-    // response.setCharacterEncoding("UTF-8");
-
-    // // Write JSON data to response
-    // response.getWriter().write(jsonData);
   }
 }

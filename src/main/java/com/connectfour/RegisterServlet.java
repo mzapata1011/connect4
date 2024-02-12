@@ -1,101 +1,77 @@
 package com.connectfour;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import javax.servlet.http.*;
 
-@WebServlet("/registerServlet")
+@WebServlet("/registro")
 public class RegisterServlet extends HttpServlet {
-  /**
-   * #TODO: registro tiene que verificar que:
-   * - el username no existe
-   * - el correo no esta en uso
-   * - las dos contraseñas son iguales
-   * - recibir las contraseñas en hash
-   */
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    Connection connection;
-    Statement statement;
-    String sql;
-    HashMap<String, String> userMap = new HashMap<String, String>();
-    PrintWriter out;
-    // hacer logica de los datos
-    try {
-      userMap = processMultipartContent(request);
-    } catch (FileUploadException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    String usuario = userMap.get("username");
-    String email = userMap.get("email");
-    String pwd = userMap.get("password");
-    // mandar a la base de datos el nuevo user que se crea
-    // añadir a bloque condicial de logica de proteccion
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (ClassNotFoundException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-
-    }
+  public void doPost(HttpServletRequest req, HttpServletResponse res)
+    throws IOException, ServletException {
     
-    try{
-        connection =
+    Connection con;
+    Statement st;
+    String SQL,username,password,email;
+    ResultSet rs;
+    PrintWriter out;
+    HttpSession session = req.getSession(true);
+
+   username = req.getParameter("username");
+   password = req.getParameter("password");
+   email = req.getParameter("email");
+
+    //Comprobar datos
+    System.out.println("Password = " + password);
+    System.out.println("Username = " + username);
+    System.out.println("Email = " + email);
+
+    try {
+      con =
         DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/proyect",
-            "root",
-            ""
+          "jdbc:mysql://127.0.0.1/proyect",
+          "root",
+          ""
         );
-        statement = connection.createStatement();
-        sql =
-        "INSERT INTO users (username,email,pwd)  VALUES ('" +
-        usuario +
-        "','" +
-        email +
-        "','" +
-        pwd +
-        "')";
-        System.out.println(sql);
-        statement.executeUpdate(sql);
-        response.setContentType("text/plain");
-        out = response.getWriter();
-        out.println("Usuario registrado");
-  }catch(Exception e){
-    System.err.println(e);
-  }
-  }
+      st = con.createStatement();
 
+      SQL =
+        "SELECT * FROM users WHERE username = '" +
+        username +       
+        "' OR email = '" +
+        email + "'";
+        
+      rs = st.executeQuery(SQL);
+      out = res.getWriter();
+      res.setContentType("text/html");
+      out.println("<html><body>");
 
-  private HashMap<String, String> processMultipartContent(
-    HttpServletRequest request
-  ) throws IOException, FileUploadException {
-    // Read the multipart content
-    DiskFileItemFactory factory = new DiskFileItemFactory();
-    ServletFileUpload upload = new ServletFileUpload(factory);
-    List<FileItem> items = upload.parseRequest(request);
-    HashMap<String, String> hashmap = new HashMap<String, String>();
+      
+      if(rs.next()){
 
-    for (FileItem item : items) {
-      if (item.isFormField()) {
-        // Process regular form field
-        String fieldName = item.getFieldName();
-        String fieldValue = item.getString();
-        hashmap.put(fieldName, fieldValue);
-        System.out.println(fieldName+" = "+fieldValue);
+        // Error registro cuenta existente 
+        res.sendRedirect("errorRegistroCuenta.html");       
+       
+        
+      }else{
+        SQL = "INSERT INTO users (username,pwd,email) VALUES ('"+ username +"','"+ password +"' , '" + email +"')";
+        st.executeUpdate(SQL);
+        session.setAttribute("sessionUser",username);
+        res.sendRedirect("menu.html");
       }
+
+      out.println("</body></html>");
+      out.close();
+      rs.close();
+      st.close();
+      con.close();
+
+    } catch (Exception e) {
+      System.out.println("Error: " + e);
     }
-    return hashmap;
   }
+
+ 
 }

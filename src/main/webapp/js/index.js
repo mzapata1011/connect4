@@ -1,19 +1,21 @@
 //index.js
-var numeroPatidas;
+var partidas;
 function fetchSession() {
     return new Promise(function (resolve, reject) {
         fetch("InicioServlet")
             .then(response => response.json())
             .then(data => {
                 console.log("Viendo la sesion");
+                console.log("data:");
+                console.log(data);
                 var username = data["username"];
-
+                partidas=data["partidas"];
+                console.log(partidas);
                 console.log("Username: " + username);
                 if (username == "guest") {
                     window.location.href = 'login.html';
                 } else {
-                    numeroPatidas = data["numero de partidas"];
-                    console.log("numero de partidas= " + numeroPatidas);
+                    console.log("numero de partidas= "+partidas.length);
 
 
                 }
@@ -22,16 +24,6 @@ function fetchSession() {
             .catch(error => reject());
     });
 }
-
-document.getElementById(`navigateButton`).addEventListener(`click`, function () {
-    window.location.href = 'partida.html';
-})
-var login = document.getElementById('IniciarSesion');
-
-document.getElementById(`IniciarSesion`).addEventListener(`click`, function () {
-    window.location.href = 'login.html';
-})
-
 
 /**
  * 
@@ -42,7 +34,7 @@ document.getElementById(`IniciarSesion`).addEventListener(`click`, function () {
  * @param {*} topt : pixel mas a la derecha del boton
  * crea un boton dada las especificaciones
  */
-function createButton(id, name, value, left, topt) {
+function createButton(id, name, value, left, topt, action) {
     
     var Button = document.createElement("input");
     Button.type = "submit";
@@ -54,10 +46,15 @@ function createButton(id, name, value, left, topt) {
 
     Button.style.left = left + "px";
     Button.style.top = top + "px";
+
+    Button.addEventListener("click", action);
+
     var label = document.createElement("label");
     label.htmlFor = id;
+
     document.getElementById("partidas").appendChild(Button);
     document.getElementById("partidas").appendChild(label);
+    
 }
 
 
@@ -69,10 +66,10 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(function(){
             
             
-            for (let i = 0; i < numeroPatidas; i++) {
+            for (let i = 0; i < partidas.length; i++) {
                 //hacer que cada boton vaya a tablero del tablero necesario
-                const nombreBoton= "partida numero: "+i;
-                createButton("partidas", "boton", nombreBoton, i * 200, 400); // ver si de id le puedes poner i
+                const nombreBoton= "partida numero: "+partidas[i];
+                createButton(partidas[i], "boton", nombreBoton, i * 200, 400, myAction); // ver si de id le puedes poner i
                 //
             }
 
@@ -82,3 +79,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 });
+
+function myAction(event){ 
+    //#TODO: enviar ambien el numero de jugador 
+
+  // Access the button element that triggered the event
+  var clickedButton = event.target;
+
+  // Get the ID of the clicked button
+  var id = clickedButton.id;
+
+  // Create a JSON object containing the ID
+  var data = { "id": id};
+
+  // Make a POST request to the server with the ID as JSON
+  fetch('EscogerPartidaServlet', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+  })
+  .then(response => {
+      if (response.ok) {
+          // Server accepted the data
+          console.log('Data sent successfully');
+      } else {
+          // Server returned an error
+          console.error('Failed to send data');
+      }
+  })
+  .catch(error => {
+      // An error occurred while sending the data
+      console.error('Error:', error);
+  });
+  window.location.href = 'partida.html';
+}

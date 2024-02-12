@@ -20,14 +20,7 @@ public class getSessionServlet extends HttpServlet {
         JSONObject sesion= new JSONObject();
         String usuario=(String) session.getAttribute("username");
         sesion.put("username", usuario);
-        //int numeroPartidas= (Integer) session.getAttribute("numero de Partidas");
-        //sesion.put("numero de partidas", numeroPartidas);
-        // ArrayList <Integer> partidas= (ArrayList<Integer>) session.getAttribute("partidas");
-        // sesion.put("partidas", partidas);
 
-        // for(int i=0; i<numeroPartidas; i++){
-        //     sesion.put(String.valueOf(partidas.get(i)),session.getAttribute(String.valueOf(partidas.get(i))));
-        // }
         response.setContentType("application/json");
         response.setCharacterEncoding("ASCII");
         response.getWriter().write(sesion.toString());
