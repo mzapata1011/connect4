@@ -14,7 +14,7 @@ public class loginServlet extends HttpServlet {
     
     Connection con;
     Statement st;
-    String SQL,username,password;
+    String username,password;
     ResultSet rs;
     PrintWriter out;
     HttpSession session = req.getSession(true);
