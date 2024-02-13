@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 
 @WebServlet("/PlayServlet")
+//#TODO: ver manejar el refresh desde el servlet on un socket
 public class PlayServlet extends HttpServlet {
 
   protected void doPost(    HttpServletRequest request,
@@ -24,6 +25,7 @@ public class PlayServlet extends HttpServlet {
     Connection con = null;
     PreparedStatement psInsert = null;
     PreparedStatement psUpdate = null;
+    PreparedStatement statsStatement=null;
     BufferedReader reader = request.getReader();
     StringBuilder jsonBody = new StringBuilder();
     String line;
@@ -69,31 +71,35 @@ public class PlayServlet extends HttpServlet {
       psUpdate.setInt(1, game);
       psUpdate.executeUpdate();
 
+      //si la partida esta terminada vemos el mapa, los puntos
       if (jsonObject.getInt("turnos") == 36) {
         HashMap<Integer, String> mapa = new HashMap<Integer, String>();
         JSONObject Jsonmapa = jsonObject.getJSONObject("mapa");
         System.out.println(Jsonmapa);
         Iterator<String> keys = Jsonmapa.keys();
+
+        //pasamos el mapa a un hashmap
         while (keys.hasNext()) {
           String key = keys.next();
           String value = Jsonmapa.getString(key);
           mapa.put(Integer.parseInt(key), value);
-        }
+
+
+        }// fin while has keys
+
         System.out.print("mapa= " + mapa);
         Puntos puntos = new Puntos();
         puntos.setMapa(mapa);
         int[][] Puntos = puntos.contadorPuntos();
-        int Azules= Arrays.stream(Puntos[1]).sum(), rojos= Arrays.stream(Puntos[0]).sum();;
+        int Azules= Arrays.stream(Puntos[0]).sum(), rojos= Arrays.stream(Puntos[1]).sum();
         System.out.println("Azules tiene: " + Azules + " puntos");
         System.out.print("Rojo tiene: " + rojos + " puntos");
-        int ganador = (rojos > Azules) ? 0 : 1;
 
         String ganadorQuery =
-          "UPDATE games SET active = ?, turn = ?  WHERE game_id = ?";
+          "UPDATE games SET active = ?  WHERE game_id = ?";
         psUpdate = con.prepareStatement(ganadorQuery);
-        psUpdate.setInt(1, ganador); // Set the value for the turn column
-        psUpdate.setBoolean(2, false); // Set the new value for the active column
-        psUpdate.setInt(3, game); // Set the value for the game_id column
+        psUpdate.setBoolean(1, false); // Set the new value for the active column
+        psUpdate.setInt(2, game); // Set the value for the game_id column
         psUpdate.executeUpdate();
 
         responseData +=
@@ -103,8 +109,33 @@ public class PlayServlet extends HttpServlet {
           rojos +
           " puntos";
 
-          //#TODO: hacer la nueva tabla de partidas terminadas y poner las estasdisticas de la partida
-      }
+          //añadimos los resultados a la tabla de partidas terminadas
+          String statsQuery="INSERT into partidasTerminadas (game_id,user_id,result,horizontal,vertical,diagonal)"+ 
+                            "VALUES (?,?,?,?,?,?),(?,?,?,?,?,?)";
+          statsStatement = con.prepareStatement(statsQuery);
+
+          //valores del jugador 1
+          statsStatement.setInt(1,game);
+          statsStatement.setInt(2,jsonObject.getInt("J1_id"));
+          statsStatement.setString(3,(Azules<rojos)?"w":(Azules==rojos)?"t":"l");
+          statsStatement.setInt(4,Puntos[1][0]);
+          statsStatement.setInt(5,Puntos[1][1]);
+          statsStatement.setInt(6,Puntos[1][2]);
+          //valores del jugador 2
+          statsStatement.setInt(7,game);
+          statsStatement.setInt(8,jsonObject.getInt("J2_id"));
+          statsStatement.setString(9,(Azules>rojos)?"w":(Azules==rojos)?"t":"l");
+          statsStatement.setInt(10,Puntos[0][0]);
+          statsStatement.setInt(11,Puntos[0][1]);
+          statsStatement.setInt(12,Puntos[0][2]);
+
+          @SuppressWarnings("unused")
+          int rowsAffected = statsStatement.executeUpdate();
+
+
+      }//fin del if turno==36
+
+
       // Set the content type to plain text
       response.setContentType("text/plain");
 
@@ -119,6 +150,7 @@ public class PlayServlet extends HttpServlet {
       try {
         if (psInsert != null) psInsert.close();
         if (psUpdate != null) psUpdate.close();
+        if(statsStatement !=null) statsStatement.close();
         if (con != null) con.close();
       } catch (SQLException e) {
         e.printStackTrace();

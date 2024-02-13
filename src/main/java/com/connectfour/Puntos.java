@@ -101,8 +101,8 @@ public class Puntos {
 
         }
         
-        System.out.println("Jugador 1 tiene "+ Arrays.stream(puntos[0]).sum()+" puntos");
-        System.out.println("Jugador 2 tiene "+ Arrays.stream(puntos[1]).sum()+" puntos");
+        System.out.println("Jugador 1 tiene "+ Arrays.stream(puntos[1]).sum()+" puntos");
+        System.out.println("Jugador 2 tiene "+ Arrays.stream(puntos[0]).sum()+" puntos");
         return puntos;
     }
 

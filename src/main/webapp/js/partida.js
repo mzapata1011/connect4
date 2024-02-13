@@ -17,15 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (canvas.getContext) {
         // Set the width and height of the canvas
         canvas.width = 650; // set your desired width
-        canvas.height = screenHeight - 50; // set your desired height
-
-        // Get the 2D rendering context
-        const context = canvas.getContext('2d');
-
-        // Now you can use the 'context' to draw on the canvas
-        // For example, draw a rectangle with a fill color
-        // context.fillStyle = 'white';
-        // context.fillRect(50, 0, 600, canvas.height); // x, y, width, height
+        canvas.height = 650 // set your desired height
 
         fetchDataFromServlet();
 
@@ -148,7 +140,6 @@ function fetchDataFromServlet() {
                 jsonMaxColumns[Number % 6] = parseInt(Number, 10);
             });
             dibujaTablero(jsonData);
-            document.getElementById("turno").innerText = " Ahora juega :" + data["turno"];
             console.log("username= " + data["jugador"]);
             console.log("turno: " + data["turno"]);
             if (data["jugador"] == data["turno"]) {
@@ -177,7 +168,7 @@ function dibujaTablero(jsonData) {
     const tablero = Object.keys(jsonData);
     const context = canvas.getContext('2d');
     context.fillStyle = 'black';
-    context.fillRect(50, 25, 600, canvas.height); // x, y, width, height
+    context.fillRect(0, 0, canvas.width, canvas.height); // x, y, width, height
     for (let ficha = 0; ficha < 36; ficha++) {
         const propertyValue = jsonData[ficha] || 'white';// si tablero[ficha] no exite toma el valor white
         let { XPosition, YPosition } = coordenada(ficha);
@@ -194,7 +185,7 @@ function dibujaTablero(jsonData) {
  */
 function coordenada(casilla) {
     let YPosition = 600 - Math.floor(casilla / 6) * 100;
-    let XPosition = (casilla % 6 + 1) * 100;
+    let XPosition = (casilla % 6 + 1) * 100 -50;
     return { XPosition, YPosition };
 }
 
@@ -210,7 +201,7 @@ function drawCircle(X, Y, c) {
     const context = canvas.getContext('2d');
     context.fillStyle = c;
     context.beginPath();
-    context.arc(X, Y, 40, 0, 2 * Math.PI);
+    context.arc(X, Y, 50, 0, 2 * Math.PI);
     context.fill();
     context.closePath();
 }
@@ -258,7 +249,8 @@ function disparar() {
     if (parentElement) {
         for (let i=0;i<=6;i++){
             if((jsonMaxColumns[i]/6)<5){
-                createRadioButton("radioButton"+i,"PosicionColumna",i,(i+1)*100,700,(i+1));
+                createRadioButton("radioButton"+i,"PosicionColumna",i,canvas.width/6 *i,0,(i+1));
+                console.log("widht= "+canvas.width/6);
             }
         }
     }
