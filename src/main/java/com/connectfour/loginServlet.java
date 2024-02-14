@@ -35,7 +35,7 @@ public class loginServlet extends HttpServlet {
       
       PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND pwd = ?");
       ps.setString(1, username);
-      ps.setString(2, password);
+      ps.setString(2, PasswordHash.hashPassword(password));
       rs = ps.executeQuery();
 
       out = res.getWriter();

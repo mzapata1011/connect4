@@ -1,5 +1,9 @@
+let ready= false;
+
 /**
- * #TODO: Login y register tienen que mandar las contraseñas en hash
+ * Manda los datos del login al servlet
+ * #TODO: hacer el hash para las contraseñas.
+ * #TODO: mostrar el resultado del login incorrecto en caso de que pase
  */
 function login() {
     const loginForm = document.getElementById('loginForm');
@@ -15,8 +19,8 @@ function login() {
         return response.text(); // or response.json() if expecting JSON
     })
     .then(data => {
-        
-        console.log('Login response:' +  data);
+
+        window.location.href="index.html";
         // Handle the login response as needed
     })
     .catch(error => {
@@ -24,6 +28,10 @@ function login() {
     });
 }
 
+/**
+ * manda los datos de registro al servlet.
+ * #TODO: mandar la contraseñas en hash
+ */
 function register() {
     const registerForm = document.getElementById('registerForm');
     const formData = new FormData(registerForm);
@@ -44,5 +52,6 @@ function register() {
     })
     .catch(error => {
         console.error('Fetch error:', error);
-    });
-}
+    })
+
+};

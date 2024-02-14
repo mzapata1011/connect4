@@ -17,16 +17,17 @@
 
 
 input[type='radio'] {
-    position : absolute;
+    position : fixed;
     box-sizing: border-box;
     appearance: none;
-    background: white;
+    /* background: white; */
+    z-index:1;
     /* outline: 5px solid #333; */
     /* border: 3px solid white; */
-    width: 16%;
-    height: 100px;
+    width: 14%;
+    height: 800px;
     cursor: pointer;
-    /* visibility: none; */
+    visibility: none;
     
 
   }
@@ -35,6 +36,20 @@ input[type='radio'] {
     /* background: whitesmoke; */
     visibility: none;
   }
+
+  #submitButton {
+    position :absolute;
+    top: 600px;
+    left: 100px;
+    z-index:1;
+    visibility: hidden ;
+    pointer-events: none ;
+    background-color: red;
+    color: white;
+    cursor : pointer;
+    
+    /* Add more styles as needed */
+}
 /* .customRadioButton:nth-child(1) { left: 0%; }
 .customRadioButton:nth-child(2) { left: 16.666%; }
 .customRadioButton:nth-child(3) { left: 33.333%; }

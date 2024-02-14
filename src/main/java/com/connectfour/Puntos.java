@@ -24,7 +24,6 @@ public class Puntos {
      * 
      * @param casilla que se evalua
      * @param casillaSiguiente casilla a la que se mueve
-     * @param Mapa tablero al finalizar la partida
      * @return es true si las dos son del mismo color
      */
     public boolean casillaSeguida(int casilla, int casillaSiguiente){
@@ -60,7 +59,6 @@ public class Puntos {
 
     /**
      * cuenta los puntos en todo el mapa
-     * @param Mapa
      * @return puntos [][]
      * puntos [0] son los puntos del jugador 1
      * puntos[1] son los ppuntos del jugador 2
@@ -108,10 +106,9 @@ public class Puntos {
 
     /**
      * cuenta las casillas seguidas dependiendo de la direccion que se compara
-     * @param Mapa
      * @param camino la direccion de la siguiente casilla
-     * @param casilla 
-     * @return
+     * @param casilla inicial
+     * @return true si son iguales false si son diferentes
      */
     public boolean contadorPuntos(int camino,int casilla){
         System.out.println("casilla: "+casilla+ " la comparamos con la casilla: " +(casilla+camino));

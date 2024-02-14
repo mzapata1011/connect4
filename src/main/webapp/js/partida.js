@@ -1,11 +1,13 @@
-// prueba.js
+
+
 
 // Get the canvas element
 const canvas = document.getElementById('myCanvas');
 // Get the width and height of the screen
-const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-const screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+const screenWidth = 650;//window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+const screenHeight = 650;//window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 let turno = false;
+let partida=0;
 let casillaAnterior = 0;
 let intentos = 0;
 let jsonMaxColumns = [];
@@ -26,16 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Canvas not supported in this browser.');
     }
 
-    // Add the click event listener
-    document.addEventListener('click', (event) => {
-        const clickX = event.clientX;
-        const clickY = event.clientY;
-
-        // Display the click position
-
-        clickPositionElement.innerText = `Click Position: ${clickX}, ${clickY}`;
-
-    });
 });
 
 
@@ -79,7 +71,6 @@ function submitForm() {
         })
         .then(data => {
             console.log('Server response:', data);
-            window.location.href="partida.html";
             // Handle the response data as needed
         })
         .catch(error => {
@@ -89,6 +80,7 @@ function submitForm() {
 
 
 function activateFunction(value) {
+
     toggleSubmitButton();
     let casilla;
     if (jsonMaxColumns[value] !== undefined && jsonMaxColumns[value] !== null) {
@@ -125,6 +117,32 @@ function fetchDataFromServlet() {
             return response.json();
         })
         .then(data => {
+            partida=data["partida"];
+
+            let game_id=3;
+            console.log("antes de envia el socket partida= "+ partida);
+            var socket = new WebSocket("ws://localhost:8080/connect4/refresh?");
+            window.addEventListener('beforeunload', function() {
+                window.addEventListener('beforeunload', function(event) {
+                    // Close the WebSocket connection before leaving the page
+                    socket.close();
+                    // Optionally, you can provide a message to the user when closing the connection
+                    event.returnValue = 'Are you sure you want to leave?';
+                    console.alert("are u leaving?");
+                });
+            });
+            socket.onopen= () => socket.send(partida);
+            // socket.send(partida);
+            socket.onerror = function(event){
+                console.log(event);
+            }
+            socket.onmessage = function(event) {
+            if (event.data === 'refresh') {
+                location.reload(); // Refresh the page
+            }
+            
+         };
+            
             console.log("PartidaServlet pasandome la info");
             console.log("data= ");
             console.log(data);
@@ -172,6 +190,7 @@ function dibujaTablero(jsonData) {
     for (let ficha = 0; ficha < 36; ficha++) {
         const propertyValue = jsonData[ficha] || 'white';// si tablero[ficha] no exite toma el valor white
         let { XPosition, YPosition } = coordenada(ficha);
+        console.log("para la ficha: "+ficha+" la Xposition es: "+XPosition );
         drawCircle(XPosition, YPosition, propertyValue);
     }
 
@@ -195,12 +214,13 @@ function coordenada(casilla) {
  * @param {int} X cordanada X del centro del circulo
  * @param {int} Y  coordenada Y del centro del circulo
  * @param {String} c color del circulo
- * Dibuja un disco de radio 100 con el centro en {X,Y} y color c
+ * Dibuja un disco de radio 50 con el centro en {X,Y} y color c
  */
 function drawCircle(X, Y, c) {
     const context = canvas.getContext('2d');
     context.fillStyle = c;
     context.beginPath();
+    
     context.arc(X, Y, 50, 0, 2 * Math.PI);
     context.fill();
     context.closePath();
@@ -210,9 +230,9 @@ function drawCircle(X, Y, c) {
 function toggleSubmitButton() {
     const submitButton = document.getElementById('submitButton');
     const radioButtons = document.querySelectorAll('input[name="PosicionColumna"]:checked');
-
-    // If at least one radio button is selected, show the submit button; otherwise, hide it
-    submitButton.style.display = radioButtons.length > 0 ? 'block' : 'none';
+    submitButton.style.visibility = 'visible';
+    submitButton.style.pointerEvents = 'auto';
+    
 }
 
 function createRadioButton(id, name, value, left, topt) {
@@ -249,7 +269,8 @@ function disparar() {
     if (parentElement) {
         for (let i=0;i<=6;i++){
             if((jsonMaxColumns[i]/6)<5){
-                createRadioButton("radioButton"+i,"PosicionColumna",i,canvas.width/6 *i,0,(i+1));
+                console.log("para i= "+i+" left: "+canvas.width/6*i);
+                createRadioButton("radioButton"+i,"PosicionColumna",i,20+i*100,0,(i+1));//left: canvas.width/6 *i
                 console.log("widht= "+canvas.width/6);
             }
         }

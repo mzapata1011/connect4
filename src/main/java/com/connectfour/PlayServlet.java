@@ -30,6 +30,7 @@ public class PlayServlet extends HttpServlet {
     StringBuilder jsonBody = new StringBuilder();
     String line;
 
+
     try {
       while ((line = reader.readLine()) != null) {
         jsonBody.append(line);
@@ -134,7 +135,9 @@ public class PlayServlet extends HttpServlet {
 
 
       }//fin del if turno==36
-
+      else {
+         RefreshSocket.refreshActiveGame(game+"");
+      }
 
       // Set the content type to plain text
       response.setContentType("text/plain");

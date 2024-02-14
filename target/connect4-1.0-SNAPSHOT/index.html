@@ -4,32 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
-  <title>Hello World 1.2.4</title>
+  <link rel="icon" href="../resources/favicon.ico.png" type="image/x-icon">
+  <title>Conect4</title>
+  <style>
+    .botonDePartida {
+      position: absolute;
+      white-space: pre-line;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h1>Hello, World!</h1>
-  <!-- <button onclick="navigateToPage('tablero.html')">Go to Page 2</button> -->
-  <!-- <button id="Juego">Press Me</button> -->
-  <!-- Button to trigger the page navigation -->
-  <button id="navigateButton">Partida prueba: </button>
-  <br>
-  <button id="IniciarSesion"> Iniciar sesion:</button>
+  <a>
+    Conect4
+  </a>
 
-  <script>
-    document.getElementById(`navigateButton`).addEventListener(`click`, function(){
-      window.location.href='nextPage.html';
-    })
-    var login=document.getElementById('IniciarSesion');
-    console.log(login);
-    document.getElementById(`IniciarSesion`).addEventListener(`click`, function(){
-      window.location.href='login.html';
-    })
+  <a href="Inicio.html">
+    <input type="button" value="Jugar">
+  </a>
 
-  </script>
-  
 
 </body>
 

@@ -5,26 +5,31 @@ import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import java.security.MessageDigest;
 
 @WebServlet("/registro")
 public class RegisterServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest req, HttpServletResponse res)
     throws IOException, ServletException {
-    
+
+      
+
     Connection con;
     Statement st;
-    String SQL,username,password,email;
+    String SQL,username,password1,password2,email;
     ResultSet rs;
     PrintWriter out;
     HttpSession session = req.getSession(true);
 
    username = req.getParameter("username");
-   password = req.getParameter("password");
+   password1 = req.getParameter("password");
+   password2 =req.getParameter("password");
    email = req.getParameter("email");
 
+   if(!password1.equals(password2)) res.sendRedirect("errorRegistroCuenta.html");
     //Comprobar datos
-    System.out.println("Password = " + password);
+    System.out.println("Password = " + password1);
     System.out.println("Username = " + username);
     System.out.println("Email = " + email);
 
@@ -56,7 +61,8 @@ public class RegisterServlet extends HttpServlet {
        
         
       }else{
-        SQL = "INSERT INTO users (username,pwd,email) VALUES ('"+ username +"','"+ password +"' , '" + email +"')";
+        password1= PasswordHash.hashPassword(password2);
+        SQL = "INSERT INTO users (username,pwd,email) VALUES ('"+ username +"','"+ password1 +"' , '" + email +"')";
         st.executeUpdate(SQL);
         session.setAttribute("sessionUser",username);
         res.sendRedirect("menu.html");

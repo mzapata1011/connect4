@@ -92,6 +92,7 @@ public class PartidaServlet extends HttpServlet {
       enviar.put("mapa", mapa);
       enviar.put("turno", turn);
       enviar.put("jugador", username);
+      enviar.put("partida",numero);
 
       // System.out.print("boardMap= ");
       // System.out.println(enviar);

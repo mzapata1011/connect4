@@ -2,54 +2,60 @@
 @packages
 @argfile
 -classpath
-'C:/Users/manue/.m2/repository/javax/javaee-web-api/6.0/javaee-web-api-6.0.jar;C:/Users/manue/.m2/repository/org/json/json/20231013/json-20231013.jar;C:/Users/manue/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar;C:/Users/manue/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar;C:/Users/manue/.m2/repository/commons-fileupload/commons-fileupload/1.4/commons-fileupload-1.4.jar;C:/Users/manue/.m2/repository/commons-io/commons-io/2.2/commons-io-2.2.jar'
+'C:/Users/manue/.m2/repository/javax/javaee-web-api/6.0/javaee-web-api-6.0.jar;C:/Users/manue/.m2/repository/org/json/json/20231013/json-20231013.jar;C:/Users/manue/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar;C:/Users/manue/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar;C:/Users/manue/.m2/repository/javax/websocket/javax.websocket-api/1.1/javax.websocket-api-1.1.jar;C:/Users/manue/.m2/repository/commons-fileupload/commons-fileupload/1.4/commons-fileupload-1.4.jar;C:/Users/manue/.m2/repository/commons-io/commons-io/2.2/commons-io-2.2.jar'
 -encoding
 'UTF-8'
 -protected
 -sourcepath
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java'
 -author
 -bottom
-'Copyright &#169; 2023. All rights reserved.'
+'Copyright &#169; 2024. All rights reserved.'
 -charset
 'UTF-8'
 -d
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/target/site/apidocs'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
 'connect4 1.0-SNAPSHOT API'
 -linkoffline
-'https://docs.oracle.com/javase/6/docs/api' 'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/target/javadoc-bundle-options'
+'https://docs.oracle.com/javase/6/docs/api' 'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
 'connect4 1.0-SNAPSHOT API'
 com.connectfour
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/Juego.java'
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/Jugador.java'
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/loginServlet.java'
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/NextPageServlet.java'
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/PlayServlet.java'
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/Prueba.java'
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/RegisterServlet.java'
-'C:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/Tablero.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/EscogerPartidaServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/getSessionServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/InicioServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/joinGameServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/loginServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/newGameServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/PartidaServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/PlayServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/Puntos.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/RefreshSocket.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/RegisterServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/resumeServlet.java'
+'c:/Users/manue/OneDrive/Escritorio/Proyecto/connect4/src/main/java/com/connectfour/StatsServlet.java'
 C:\Users\manue\.m2\repository\javax\javaee-web-api\6.0\javaee-web-api-6.0.jar = 1701962506237
 C:\Users\manue\.m2\repository\org\json\json\20231013\json-20231013.jar = 1701970519501
 C:\Users\manue\.m2\repository\com\mysql\mysql-connector-j\8.0.33\mysql-connector-j-8.0.33.jar = 1701956371310
 C:\Users\manue\.m2\repository\com\google\protobuf\protobuf-java\3.21.9\protobuf-java-3.21.9.jar = 1701956371097
+C:\Users\manue\.m2\repository\javax\websocket\javax.websocket-api\1.1\javax.websocket-api-1.1.jar = 1407348155000
 C:\Users\manue\.m2\repository\commons-fileupload\commons-fileupload\1.4\commons-fileupload-1.4.jar = 1702128544072
 C:\Users\manue\.m2\repository\commons-io\commons-io\2.2\commons-io-2.2.jar = 1701895212681
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\src\main\java = 1701897734873
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\allclasses-frame.html = 1702149397253
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\allclasses-noframe.html = 1702149397256
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\constant-values.html = 1702149396572
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\deprecated-list.html = 1702149397246
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\help-doc.html = 1702149397276
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\index-all.html = 1702149397197
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\index.html = 1702149397262
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\overview-tree.html = 1702149396992
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\package-list = 1702149396412
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\script.js = 1702149397290
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\serialized-form.html = 1702149396605
-C:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\stylesheet.css = 1702149397285
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\src\main\java = 1701897734873
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\allclasses-frame.html = 1707919353146
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\allclasses-noframe.html = 1707919353152
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\constant-values.html = 1707919352776
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\deprecated-list.html = 1707919353131
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\help-doc.html = 1707919353181
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\index-all.html = 1707919353120
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\index.html = 1707919353158
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\overview-tree.html = 1707919353078
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\package-list = 1707919352637
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\script.js = 1707919353187
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\serialized-form.html = 1707919352828
+c:\Users\manue\OneDrive\Escritorio\Proyecto\connect4\target\site\apidocs\stylesheet.css = 1707914053496
