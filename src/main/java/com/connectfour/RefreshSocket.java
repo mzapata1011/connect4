@@ -1,10 +1,8 @@
 package com.connectfour;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.CloseReason;
@@ -13,17 +11,15 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 @ServerEndpoint("/refresh")
 public class RefreshSocket {
     
     private static final Map<String, Session> sessions = new ConcurrentHashMap<String,Session>();
-    private static JSONObject juegos =new JSONObject();
+    private static HashMap<String,String> juegos =new HashMap<String,String>();
 
     @OnOpen
     public void onOpen(Session session) {
@@ -40,7 +36,7 @@ public class RefreshSocket {
     public void onClose(Session session) {
         System.out.println("WebSocket connection number "+session.getId()+"closed");
         sessions.remove(session.getId());
-        
+        juegos.remove(session.getId());        
     }
 
     @OnError
@@ -63,7 +59,7 @@ public class RefreshSocket {
         try {
             System.out.println("Message received: " + message);
             session.getBasicRemote().sendText("Received your message: " + message);
-            juegos.accumulate(session.getId(),message);
+            juegos.put(session.getId(),message);
             System.out.println("Los juegos con socket abiertos son: "+juegos.toString());
             
         } catch (IOException e) {
@@ -76,13 +72,25 @@ public class RefreshSocket {
     }
 
     public static void refreshActiveGame(String game_id)throws IOException{
-        System.out.println("Rfrescamos las partidas "+game_id);
         
-        for (String jsonKey : juegos.keySet() ){
-            if(juegos.getString(jsonKey).equals(game_id)){
-                System.out.println("deberiamos refrescar bro keyset:"+jsonKey);
+        
+        for (Map.Entry<String, String> entry : juegos.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            // Check if the value matches the target value
+            if (game_id.equals(value)) {
+                System.out.println("Rrescamos el socket "+key+ " conectado a la partida: "+value);
+                sendMessageToClient(sessions.get(key), "Function for key " + key);
             }
-       
+        }
+    }
+
+    private static void sendMessageToClient(Session session, String message) {
+        try {
+            session.getBasicRemote().sendText(message);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

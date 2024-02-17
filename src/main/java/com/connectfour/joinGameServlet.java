@@ -60,7 +60,7 @@ public class joinGameServlet extends HttpServlet {
             }else{
                
                 out.println("<br><p>No hay partidas a las que unirse, genere una partida ");
-                out.println("<a href='newGame'>aquí</a></p>");
+                out.println("<a href='newGame.html'>aquí</a></p>");
                
             }
 

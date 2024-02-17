@@ -5,7 +5,7 @@ import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.security.MessageDigest;
+
 
 @WebServlet("/registro")
 public class RegisterServlet extends HttpServlet {
@@ -23,8 +23,8 @@ public class RegisterServlet extends HttpServlet {
     HttpSession session = req.getSession(true);
 
    username = req.getParameter("username");
-   password1 = req.getParameter("password");
-   password2 =req.getParameter("password");
+   password1 = req.getParameter("password1");
+   password2 =req.getParameter("password2");
    email = req.getParameter("email");
 
    if(!password1.equals(password2)) res.sendRedirect("errorRegistroCuenta.html");
