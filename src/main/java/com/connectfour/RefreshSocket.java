@@ -80,8 +80,8 @@ public class RefreshSocket {
 
             // Check if the value matches the target value
             if (game_id.equals(value)) {
-                System.out.println("Rrescamos el socket "+key+ " conectado a la partida: "+value);
-                sendMessageToClient(sessions.get(key), "Function for key " + key);
+                System.out.println("Refrescamos el socket "+key+ " conectado a la partida: "+value);
+                sendMessageToClient(sessions.get(key), "refresh" );
             }
         }
     }

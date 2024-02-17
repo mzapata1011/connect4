@@ -137,20 +137,23 @@ function fetchDataFromServlet() {
                 console.log(event);
             }
             socket.onmessage = function(event) {
+                console.log("websocket recibe: ");
+                console.log(event["data"]);
             if (event.data === 'refresh') {
+                console.log("refresco");
                 location.reload(); // Refresh the page
             }
             
          };
             
-            console.log("PartidaServlet pasandome la info");
-            console.log("data= ");
-            console.log(data);
+            //console.log("PartidaServlet pasandome la info");
+            //console.log("data= ");
+            //console.log(data);
             jsonData = data["mapa"];
             J1_id=data["J1_ID"];
             J2_id=data["J2_ID"];
-            console.log("j1= "+J1_id);
-            console.log("j2= "+J2_id);
+            //console.log("j1= "+J1_id);
+            //console.log("j2= "+J2_id);
             const jsonNumber = Object.keys(jsonData);
             var turnos= jsonNumber.length;
             jsonMaxColumns=[null,null,null,null,null,null];
@@ -158,15 +161,15 @@ function fetchDataFromServlet() {
                 jsonMaxColumns[Number % 6] = parseInt(Number, 10);
             });
             dibujaTablero(jsonData);
-            console.log("username= " + data["jugador"]);
-            console.log("turno: " + data["turno"]);
+            //console.log("username= " + data["jugador"]);
+            //console.log("turno: " + data["turno"]);
             if (data["jugador"] == data["turno"]) {
                 turno = true;
-                console.log("es tu turno");
-                console.log(turno);
+                //console.log("es tu turno");
+                //console.log(turno);
                 disparar();
             } else {
-                console.log("No es tu turno");
+                //console.log("No es tu turno");
                 turno = false;
             }
         })
@@ -262,16 +265,16 @@ function createRadioButton(id, name, value, left, topt) {
 
 function disparar() {
     const parentElement = document.getElementById('columna');
-    console.log("disparo? ");
-    console.log("estamos estudiando donde se puede disparar y los maximos de cada columna son: ");
-    console.log(jsonMaxColumns);
+    //console.log("disparo? ");
+    //console.log("estamos estudiando donde se puede disparar y los maximos de cada columna son: ");
+    //console.log(jsonMaxColumns);
 
     if (parentElement) {
         for (let i=0;i<=6;i++){
             if((jsonMaxColumns[i]/6)<5){
-                console.log("para i= "+i+" left: "+canvas.width/6*i);
+                //console.log("para i= "+i+" left: "+canvas.width/6*i);
                 createRadioButton("radioButton"+i,"PosicionColumna",i,20+i*100,0,(i+1));//left: canvas.width/6 *i
-                console.log("widht= "+canvas.width/6);
+                //console.log("widht= "+canvas.width/6);
             }
         }
     }

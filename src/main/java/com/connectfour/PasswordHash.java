@@ -27,7 +27,7 @@ public class PasswordHash {
 
     public static void main(String[] args) {
         // Example usage:
-        String password = "mySecretPassword";
+        String password = "televisor";
         String hashedPassword = hashPassword(password);
         System.out.println("Hashed password: " + hashedPassword);
     }

@@ -1,0 +1,4 @@
+0:0:0:0:0:0:0:1 - - [18/Feb/2024:00:00:00 +0100] "GET /connect4/stats.html HTTP/1.1" 200 225 http-bio-8080-exec-9 11
+0:0:0:0:0:0:0:1 - - [18/Feb/2024:00:00:00 +0100] "GET /connect4/js/stats.js HTTP/1.1" 200 2482 http-bio-8080-exec-9 7
+0:0:0:0:0:0:0:1 - - [18/Feb/2024:00:00:00 +0100] "GET /connect4/css/stats.css HTTP/1.1" 200 364 http-bio-8080-exec-10 12
+0:0:0:0:0:0:0:1 - - [18/Feb/2024:00:00:00 +0100] "POST /connect4/stats HTTP/1.1" 200 175 http-bio-8080-exec-1 14
