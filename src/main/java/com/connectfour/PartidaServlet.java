@@ -3,6 +3,7 @@ package com.connectfour;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -66,12 +67,13 @@ public class PartidaServlet extends HttpServlet {
       HashMap<Integer, String> mapa = new HashMap<Integer, String>();
       String j1 = null, j2 = null, turn = null;
 
-      
+      int turnos=0;
       while (rs.next()) {
         if (rs.getString(2) != null) {
           
           String color = rs.getString(2).equals(username) ? "blue" : "red";
           mapa.put(rs.getInt(1), color);
+          turnos++;
         }
 
         if (j1 == null) {
@@ -93,6 +95,18 @@ public class PartidaServlet extends HttpServlet {
       enviar.put("turno", turn);
       enviar.put("jugador", username);
       enviar.put("partida",numero);
+
+      if (turnos==36){
+        Puntos puntos = new Puntos();
+        puntos.setMapa(mapa);
+        int[][] Puntos = puntos.contadorPuntos();
+        int Azules= Arrays.stream(Puntos[0]).sum(), rojos= Arrays.stream(Puntos[1]).sum();
+
+        String ganador= (Azules<rojos)?"victoria":(Azules==rojos)?"empate":"derrota";
+        enviar.put("ganador",ganador);
+        enviar.put("rojo",rojos);
+        enviar.put("azul",Azules);
+      }
 
       // System.out.print("boardMap= ");
       // System.out.println(enviar);

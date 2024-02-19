@@ -3,6 +3,7 @@
 
 // Get the canvas element
 const canvas = document.getElementById('myCanvas');
+
 // Get the width and height of the screen
 const screenWidth = 650;//window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 const screenHeight = 650;//window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -70,7 +71,12 @@ function submitForm() {
             return response.text(); // or response.json() if expecting json
         })
         .then(data => {
+            
             console.log('Server response:', data);
+            var rojo=data["rojo"];
+            var azul= data["azul"];
+            var resultado= data["ganador"];
+            console.log("Hiciste "+azul+" puntos y tu rival hizo "+ rojo+ " la partido quedo en: "+resultado);
             // Handle the response data as needed
         })
         .catch(error => {
@@ -117,9 +123,10 @@ function fetchDataFromServlet() {
             return response.json();
         })
         .then(data => {
+            var messageElement = document.getElementById("message");
             partida=data["partida"];
 
-            let game_id=3;
+
             console.log("antes de envia el socket partida= "+ partida);
             var socket = new WebSocket("ws://localhost:8080/connect4/refresh?");
             window.addEventListener('beforeunload', function() {
@@ -141,6 +148,7 @@ function fetchDataFromServlet() {
                 console.log(event["data"]);
             if (event.data === 'refresh') {
                 console.log("refresco");
+                socket.close();
                 location.reload(); // Refresh the page
             }
             
@@ -152,26 +160,41 @@ function fetchDataFromServlet() {
             jsonData = data["mapa"];
             J1_id=data["J1_ID"];
             J2_id=data["J2_ID"];
+            console.log("J2= "+J2_id);
+
+            
             //console.log("j1= "+J1_id);
             //console.log("j2= "+J2_id);
             const jsonNumber = Object.keys(jsonData);
             var turnos= jsonNumber.length;
+            console.log("turnos= "+turnos);
             jsonMaxColumns=[null,null,null,null,null,null];
             jsonNumber.forEach(Number => {
                 jsonMaxColumns[Number % 6] = parseInt(Number, 10);
             });
             dibujaTablero(jsonData);
-            //console.log("username= " + data["jugador"]);
-            //console.log("turno: " + data["turno"]);
-            if (data["jugador"] == data["turno"]) {
+            console.log("username= " + data["jugador"]);
+            console.log("turno: " + data["turno"]);
+            if (data["jugador"] == data["turno"] && J2_id!=undefined) {
                 turno = true;
+                
+
+                messageElement.innerHTML = "<p>Es tu turno </p>";
                 //console.log("es tu turno");
                 //console.log(turno);
                 disparar();
             } else {
                 //console.log("No es tu turno");
                 turno = false;
+                messageElement.innerHTML="<p>No Es tu turno </p>";
             }
+            if(turnos==36){
+                var rojo=data["rojo"];
+                var azul= data["azul"];
+                var resultado= data["ganador"];
+                messageElement.innerHTML=" <p> TU: "+azul+" puntos EL: "+ rojo+ "    "+resultado+ "<p>";
+            }
+
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
@@ -193,7 +216,7 @@ function dibujaTablero(jsonData) {
     for (let ficha = 0; ficha < 36; ficha++) {
         const propertyValue = jsonData[ficha] || 'white';// si tablero[ficha] no exite toma el valor white
         let { XPosition, YPosition } = coordenada(ficha);
-        console.log("para la ficha: "+ficha+" la Xposition es: "+XPosition );
+        //console.log("para la ficha: "+ficha+" la Xposition es: "+XPosition );
         drawCircle(XPosition, YPosition, propertyValue);
     }
 

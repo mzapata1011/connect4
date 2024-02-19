@@ -4,7 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../resources/favicon.ico.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="css/partida.css">
-    <title> Tablero 2.0</title>
+    <title> Connect 4</title>
+    <!-- <script src="js/websocket.js"></script> -->
+    
 
 </head>
 
@@ -12,12 +14,14 @@
     <div id="tablero">
         <canvas id="myCanvas" width="500" height="500"></canvas>
         <script src="js/partida.js"></script>
+       
 
         <form id="myForm">
             <div id="columna"></div>
             <button type="button" id="submitButton" value="Juega" onclick="submitForm()" >Juega </button>
         </form>
     </div>
+    <div id="message"></div>
 
 
 

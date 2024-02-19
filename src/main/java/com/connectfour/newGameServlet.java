@@ -49,7 +49,7 @@ public class newGameServlet extends HttpServlet {
             GameId.setAttribute("GameId", rs.getInt("game_id"));
 
             //Redireccion al tablero de la partida
-            res.sendRedirect("resume");
+            res.sendRedirect("partida.html");
 
             rs.close();
             st.close();

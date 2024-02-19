@@ -132,18 +132,20 @@ public class PlayServlet extends HttpServlet {
 
           @SuppressWarnings("unused")
           int rowsAffected = statsStatement.executeUpdate();
-
+        jsonObject.remove("number");
+        jsonObject.remove("mapa");
+        jsonObject.remove("J2_id");
+        jsonObject.remove("turnos");
 
       }//fin del if turno==36
-      else {
-         RefreshSocket.refreshActiveGame(game+"");
-      }
-
+        RefreshSocket.refreshActiveGame(game+"");
+      
       // Set the content type to plain text
-      response.setContentType("text/plain");
+      response.setContentType("rapplication/json");
 
       // Write the response data to the client
-      response.getWriter().write(responseData);
+      response.getWriter().write(jsonObject.toString());
+
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     } catch (SQLException e) {

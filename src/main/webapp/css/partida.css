@@ -50,6 +50,18 @@ input[type='radio'] {
     
     /* Add more styles as needed */
 }
+
+#message {
+  position: absolute;
+  top: 600px;
+  left: 700px;
+  color: red;        /* Change text color to blue */
+  font-size: 20px;    /* Set font size to 20 pixels */
+  font-weight: bold;  /* Make text bold */
+  z-index: 1;
+
+  /* Add more styles as needed */
+}
 /* .customRadioButton:nth-child(1) { left: 0%; }
 .customRadioButton:nth-child(2) { left: 16.666%; }
 .customRadioButton:nth-child(3) { left: 33.333%; }
