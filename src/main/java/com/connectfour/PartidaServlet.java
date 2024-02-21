@@ -45,8 +45,7 @@ public class PartidaServlet extends HttpServlet {
       HttpSession session = request.getSession(true);
       int numero = (Integer) session.getAttribute("GameId");
       String username = (String) session.getAttribute("sessionUser");
-      System.out.println("Estamos en la partida numero: " + numero);
-      System.out.println("username= "+username);
+
 
       st = con.createStatement();
       
@@ -96,23 +95,9 @@ public class PartidaServlet extends HttpServlet {
       enviar.put("jugador", username);
       enviar.put("partida",numero);
 
-      if (turnos==36){
-        Puntos puntos = new Puntos();
-        puntos.setMapa(mapa);
-        int[][] Puntos = puntos.contadorPuntos();
-        int Azules= Arrays.stream(Puntos[0]).sum(), rojos= Arrays.stream(Puntos[1]).sum();
-
-        String ganador= (Azules<rojos)?"victoria":(Azules==rojos)?"empate":"derrota";
-        enviar.put("ganador",ganador);
-        enviar.put("rojo",rojos);
-        enviar.put("azul",Azules);
-      }
-
-      // System.out.print("boardMap= ");
-      // System.out.println(enviar);
       response.setContentType("application/json");
       response.getWriter().write(enviar.toString());
-      System.out.println("enviamos al cliente: "+enviar.toString());
+      //System.out.println("enviamos al cliente: "+enviar.toString());
 
       out.close();
       con.close();

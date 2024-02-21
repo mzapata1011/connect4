@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 
+
 @WebServlet("/PlayServlet")
 //#TODO: ver manejar el refresh desde el servlet on un socket
 public class PlayServlet extends HttpServlet {
@@ -26,9 +27,11 @@ public class PlayServlet extends HttpServlet {
     PreparedStatement psInsert = null;
     PreparedStatement psUpdate = null;
     PreparedStatement statsStatement=null;
+    ResultSet rs=null;
+    Statement st;
     BufferedReader reader = request.getReader();
     StringBuilder jsonBody = new StringBuilder();
-    String line;
+    String line,SQL;
 
 
     try {
@@ -50,7 +53,9 @@ public class PlayServlet extends HttpServlet {
         );
 
       HttpSession session = request.getSession(true);
+      
       Integer game = (Integer) session.getAttribute("GameId");
+      System.out.println("Game_id= "+game);
       String number = jsonObject.getString("number");
       String player = (String) session.getAttribute("sessionUser_id");
 
@@ -74,19 +79,35 @@ public class PlayServlet extends HttpServlet {
 
       //si la partida esta terminada vemos el mapa, los puntos
       if (jsonObject.getInt("turnos") == 36) {
+
+        String ganadorQuery =
+        "UPDATE games SET active = ?  WHERE game_id = ?";
+        psUpdate = con.prepareStatement(ganadorQuery);
+        psUpdate.setBoolean(1, false); // Set the new value for the active column
+        psUpdate.setInt(2, game); // Set the value for the game_id column
+        int ex= psUpdate.executeUpdate();
+
         HashMap<Integer, String> mapa = new HashMap<Integer, String>();
-        JSONObject Jsonmapa = jsonObject.getJSONObject("mapa");
-        System.out.println(Jsonmapa);
-        Iterator<String> keys = Jsonmapa.keys();
+        SQL="SELECT number,player FROM board WHERE game="+game;
+        st=con.createStatement();
+        rs=st.executeQuery(SQL);
+        while (rs.next()) { 
+            String color = rs.getString(2).equals(player) ? "blue" : "red";
+            mapa.put(rs.getInt(1), color);
+          }
+          
+        // JSONObject Jsonmapa = jsonObject.getJSONObject("mapa");
+        System.out.println(mapa);
+        // Iterator<String> keys = Jsonmapa.keys();
 
-        //pasamos el mapa a un hashmap
-        while (keys.hasNext()) {
-          String key = keys.next();
-          String value = Jsonmapa.getString(key);
-          mapa.put(Integer.parseInt(key), value);
+        // //pasamos el mapa a un hashmap
+        // while (keys.hasNext()) {
+        //   String key = keys.next();
+        //   String value = Jsonmapa.getString(key);
+        //   mapa.put(Integer.parseInt(key), value);
 
 
-        }// fin while has keys
+        // }// fin while has keys
 
         System.out.print("mapa= " + mapa);
         Puntos puntos = new Puntos();
@@ -96,12 +117,7 @@ public class PlayServlet extends HttpServlet {
         System.out.println("Azules tiene: " + Azules + " puntos");
         System.out.print("Rojo tiene: " + rojos + " puntos");
 
-        String ganadorQuery =
-          "UPDATE games SET active = ?  WHERE game_id = ?";
-        psUpdate = con.prepareStatement(ganadorQuery);
-        psUpdate.setBoolean(1, false); // Set the new value for the active column
-        psUpdate.setInt(2, game); // Set the value for the game_id column
-        psUpdate.executeUpdate();
+
 
         responseData +=
           " Azules tiene: " +
@@ -136,16 +152,20 @@ public class PlayServlet extends HttpServlet {
         jsonObject.remove("mapa");
         jsonObject.remove("J2_id");
         jsonObject.remove("turnos");
+        jsonObject.put("azules",Azules);
+        jsonObject.put("rojos",rojos);
+        
+        // RefreshSocket.refreshActiveGame(game+"");
 
       }//fin del if turno==36
-        RefreshSocket.refreshActiveGame(game+"");
+        
       
       // Set the content type to plain text
       response.setContentType("rapplication/json");
 
       // Write the response data to the client
       response.getWriter().write(jsonObject.toString());
-
+      
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     } catch (SQLException e) {
@@ -163,3 +183,5 @@ public class PlayServlet extends HttpServlet {
     }
   }
 }
+
+

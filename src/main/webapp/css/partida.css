@@ -20,14 +20,14 @@ input[type='radio'] {
     position : fixed;
     box-sizing: border-box;
     appearance: none;
-    /* background: white; */
+    background: white;
     z-index:1;
-    /* outline: 5px solid #333; */
-    /* border: 3px solid white; */
+    outline: 5px solid #333;
+    border: 3px solid white;
     width: 14%;
-    height: 800px;
+    height: 100px;
     cursor: pointer;
-    visibility: none;
+    visibility: visible;
     
 
   }
@@ -42,7 +42,7 @@ input[type='radio'] {
     top: 600px;
     left: 100px;
     z-index:1;
-    visibility: hidden ;
+    visibility: hidden;
     pointer-events: none ;
     background-color: red;
     color: white;
@@ -61,6 +61,23 @@ input[type='radio'] {
   z-index: 1;
 
   /* Add more styles as needed */
+}
+#volver{
+  width: 100%;
+  margin-bottom: 20px;
+  padding:7px;
+  font-size: 15px;
+  transition-duration: 0.4s;
+  border: 1px solid black;
+  border-radius: 2px;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  object-fit: cover;
+  background-color: rgb(189,185,185);
+}
+#volver:hover{
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 /* .customRadioButton:nth-child(1) { left: 0%; }
 .customRadioButton:nth-child(2) { left: 16.666%; }

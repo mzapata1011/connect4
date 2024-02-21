@@ -18,7 +18,7 @@ public class RegisterServlet extends HttpServlet {
     Connection con;
     Statement st;
     String SQL,username,password1,password2,email;
-    ResultSet rs;
+    ResultSet rs,rs1;
     PrintWriter out;
     HttpSession session = req.getSession(true);
 
@@ -65,9 +65,15 @@ public class RegisterServlet extends HttpServlet {
         SQL = "INSERT INTO users (username,pwd,email) VALUES ('"+ username +"','"+ password1 +"' , '" + email +"')";
         st.executeUpdate(SQL);
         session.setAttribute("sessionUser",username);
-        res.sendRedirect("menu.html");
+        
+        SQL="SELECT user_id FROM users WHERE username = '" +
+        username +"'";
+        rs1=st.executeQuery(SQL);
+        if(rs1.next()){
+          session.setAttribute("sessionUser_id", rs.getString(1));
+        }
       }
-
+      res.sendRedirect("menu.html");
       out.println("</body></html>");
       out.close();
       rs.close();

@@ -71,17 +71,18 @@ public class Puntos {
         int[][] puntos = new int[2][3];
 
         for (int casilla =0; casilla<36; casilla++){
-            System.out.println("---------------------------casilla :"+casilla+"-------------------------------");
+            //System.out.println("---------------------------casilla :"+casilla+"-------------------------------");
             int caminos[] = buscarCamino(casilla);
             for( int camino : caminos){
-                System.out.println("---------------------------Camino: "+camino+"-------------------------------");
+                //System.out.println("---------------------------Camino: "+camino+"-------------------------------");
                 int seguidas=1;
-                while(seguidas<4 && contadorPuntos(camino, casilla+camino*(seguidas-1))){
+                while(seguidas<4 &&(contadorPuntos(camino, casilla+camino*(seguidas-1)))){
+                
                     seguidas++;
-                    System.out.println("este camino lleva "+ seguidas+" fichas seguidas");
+
                 };  
                 if (seguidas==4){ 
-                    System.out.println("En la casilla "+ casilla+" HAY PUNTOOO" );
+                    //System.out.println("En la casilla "+ casilla+" HAY PUNTOOO" );
                     int jugador= this.Mapa.get(casilla).equals("red") ? 1 : 0;
                     int direccion= camino==1?0:camino==6?1:2;
                     puntos[jugador][direccion]++;
@@ -90,11 +91,11 @@ public class Puntos {
                 }    
  
                 
-                System.out.println();                               
+                //System.out.println();                               
                  
             }
-            System.out.println("---------------------------Nueva casilla-------------------------------");
-            System.out.println();        
+            //System.out.println("---------------------------Nueva casilla-------------------------------");
+            //System.out.println();        
             
 
         }

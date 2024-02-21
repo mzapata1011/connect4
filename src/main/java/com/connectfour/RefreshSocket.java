@@ -13,7 +13,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.json.JSONObject;
 
 @ServerEndpoint("/refresh")
 public class RefreshSocket {
@@ -25,6 +24,7 @@ public class RefreshSocket {
     public void onOpen(Session session) {
         System.out.println("WebSocket connection opened. ID:"+session.getId());
         sessions.put(session.getId(), session); // Add session to the map
+
         // session.getUserProperties().put("gameId",gameId);
         // juegos.put(gameId, session.getId());
         // System.out.println("Juegos: "+ juegos.toString());
@@ -58,9 +58,21 @@ public class RefreshSocket {
         // recibo el mensaje de la partida que esta jugado el usuario y la junto al json de juegos
         try {
             System.out.println("Message received: " + message);
-            session.getBasicRemote().sendText("Received your message: " + message);
-            juegos.put(session.getId(),message);
-            System.out.println("Los juegos con socket abiertos son: "+juegos.toString());
+        
+            if( message.contains("Partida:")){
+                session.getBasicRemote().sendText("Received your message: " + message);
+                message=message.substring("Partida:".length());
+                juegos.put(session.getId(),message); // mando refresh a los sockets con esta partida abierta
+                System.out.println("Los juegos con socket abiertos son: "+juegos.toString());
+                messageRival(juegos.get(session.getId()), session.getId(), "llego rival");
+
+            }
+            else {
+                System.out.println(message);
+                messageRival(juegos.get(session.getId()), session.getId(), message);
+
+
+            }
             
         } catch (IOException e) {
             // TODO: handle exception
@@ -73,7 +85,6 @@ public class RefreshSocket {
 
     public static void refreshActiveGame(String game_id)throws IOException{
         
-        
         for (Map.Entry<String, String> entry : juegos.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -82,6 +93,29 @@ public class RefreshSocket {
             if (game_id.equals(value)) {
                 System.out.println("Refrescamos el socket "+key+ " conectado a la partida: "+value);
                 sendMessageToClient(sessions.get(key), "refresh" );
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param game_id : id del juego que estas participando
+     * @param your_id : id de tu session
+     * @param message : mensaje que le envias al rival
+     * @throws IOException
+     * Le manda un mensaje al socket del rival
+     */
+    public static void messageRival(String game_id, String your_id,String message) throws IOException{
+
+        for (Map.Entry<String, String> entry : juegos.entrySet()) {
+            
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            // Check if the value matches the target value
+            if (game_id.equals(value) && !key.equals(your_id)) {
+                System.out.println("le enviamos mensaje al el socket "+key+ " conectado a la partida: "+value);
+                sendMessageToClient(sessions.get(key), message );
             }
         }
     }

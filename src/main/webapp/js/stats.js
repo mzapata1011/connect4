@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log("data[headers[3]]= "+data[headers[3]]);
                     cell.textContent = data[headers[7]] / data[headers[3]];
                 }else if (i != 3 && i != 7) {
-                    cell.textContent = stat + " ( " + promedio + "%)";
+                    cell.textContent = stat + " ( " + promedio.toFixed + "%)";
                 } else {
                     cell.textContent = stat;
                 }
