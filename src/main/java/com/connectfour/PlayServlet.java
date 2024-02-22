@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +15,6 @@ import org.json.JSONObject;
 
 
 @WebServlet("/PlayServlet")
-//#TODO: ver manejar el refresh desde el servlet on un socket
 public class PlayServlet extends HttpServlet {
 
   protected void doPost(    HttpServletRequest request,
@@ -28,7 +26,7 @@ public class PlayServlet extends HttpServlet {
     PreparedStatement psUpdate = null;
     PreparedStatement statsStatement=null;
     ResultSet rs=null;
-    Statement st;
+    Statement st=null;
     BufferedReader reader = request.getReader();
     StringBuilder jsonBody = new StringBuilder();
     String line,SQL;
@@ -68,8 +66,8 @@ public class PlayServlet extends HttpServlet {
       psInsert.setString(3, player);
       psInsert.executeUpdate();
 
-      String responseData =
-        "El jugador " + player + " ha jugado en la casilla " + number;
+      // String responseData =
+      //   "El jugador " + player + " ha jugado en la casilla " + number;
 
       // Cambio de turno
       String updateQuery = "UPDATE games SET turn = NOT turn WHERE game_id = ?";
@@ -85,6 +83,7 @@ public class PlayServlet extends HttpServlet {
         psUpdate = con.prepareStatement(ganadorQuery);
         psUpdate.setBoolean(1, false); // Set the new value for the active column
         psUpdate.setInt(2, game); // Set the value for the game_id column
+        @SuppressWarnings("unused")
         int ex= psUpdate.executeUpdate();
 
         HashMap<Integer, String> mapa = new HashMap<Integer, String>();
@@ -119,12 +118,12 @@ public class PlayServlet extends HttpServlet {
 
 
 
-        responseData +=
-          " Azules tiene: " +
-          Azules +
-          " puntos, Rojo tiene: " +
-          rojos +
-          " puntos";
+        // responseData +=
+        //   " Azules tiene: " +
+        //   Azules +
+        //   " puntos, Rojo tiene: " +
+        //   rojos +
+        //   " puntos";
 
           //añadimos los resultados a la tabla de partidas terminadas
           String statsQuery="INSERT into partidasTerminadas (game_id,user_id,result,horizontal,vertical,diagonal)"+ 
@@ -161,11 +160,11 @@ public class PlayServlet extends HttpServlet {
         
       
       // Set the content type to plain text
-      response.setContentType("rapplication/json");
+      response.setContentType("application/json");
 
       // Write the response data to the client
       response.getWriter().write(jsonObject.toString());
-      
+
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     } catch (SQLException e) {
@@ -176,6 +175,7 @@ public class PlayServlet extends HttpServlet {
         if (psInsert != null) psInsert.close();
         if (psUpdate != null) psUpdate.close();
         if(statsStatement !=null) statsStatement.close();
+        if(st != null) st.close();
         if (con != null) con.close();
       } catch (SQLException e) {
         e.printStackTrace();

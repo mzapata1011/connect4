@@ -3,7 +3,6 @@ package com.connectfour;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.*;
 
-//#TODO: cambiar por tablero servlet
-//#TODO: recibe la informacion del tablero por el valor (int) que recibe del cliente
-//#TODO: devuelve el JSON de la  partida adecuada
 @WebServlet("/PartidaServlet")
 public class PartidaServlet extends HttpServlet {
 
@@ -66,13 +62,12 @@ public class PartidaServlet extends HttpServlet {
       HashMap<Integer, String> mapa = new HashMap<Integer, String>();
       String j1 = null, j2 = null, turn = null;
 
-      int turnos=0;
+  
       while (rs.next()) {
         if (rs.getString(2) != null) {
           
           String color = rs.getString(2).equals(username) ? "blue" : "red";
           mapa.put(rs.getInt(1), color);
-          turnos++;
         }
 
         if (j1 == null) {

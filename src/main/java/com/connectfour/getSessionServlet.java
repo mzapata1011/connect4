@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class getSessionServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        //#TODO: tienes que hacer que esto conviert la session en un JSON
+        
         HttpSession session = request.getSession(true);
         JSONObject sesion= new JSONObject();
         String usuario=(String) session.getAttribute("username");

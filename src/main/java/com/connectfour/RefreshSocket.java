@@ -75,7 +75,6 @@ public class RefreshSocket {
             }
             
         } catch (IOException e) {
-            // TODO: handle exception
             onClose(session);
 
         }
