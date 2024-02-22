@@ -3,25 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../resources/favicon.ico.png" type="image/x-icon">
+    <link rel="icon" href="../resources/favicon.ico.png" type="image/x-icon">  
     <link rel="stylesheet" type="text/css" href="css/formularios.css">  
     <link rel="stylesheet" type="text/css" href="css/errores.css">
+    
     <title>Connect4</title>
 </head>
 <body>
-    <header>
-        <h1>Connect4</h1>
-    </header>
-    <br>
 
     <div>
-        <a>Error en el login</a>
-        <br>
-    <div>
-        <a>User/Pass incorrectos o no existen</a>
-        <br>
-        <a href="login.html">Reintentar</a>        
+
+        <header>
+            Connect4
+        </header>
+        
+        <h1>Login</h1>
+        <form action="login" method="post">
+            
+            <input type="text" id="username" name="username" placeholder="&#128100; Username" required>
+            <br>            
+            <input type="password" id="password" name="password" placeholder="&#128273; Contraseña" required>
+            <br>
+            <input id="enviar" type="submit" value="Enter">
+        </form>
+        
+        <a href="formRegistro.html">No tengo cuenta</a>
     </div>
+    
+    <!--Ventana error-->
+    <input type="checkbox" id="btn-modal">
+    <div class="container-modal">
+        <div class="contenido">
+            <h2>Error login</h2>
+            <p>Usuario o contraseña incorrectos o no existen</p>
+            <div class="btn-cerrar">
+                <label for="btn-modal">Reintentar</label>
+            </div>
+        </div>    
     </div>
+
 </body>
 </html>

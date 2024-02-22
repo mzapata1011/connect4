@@ -8,30 +8,29 @@
     <title>Connect4</title>
 </head>
 <body>
-    <a>
-        Connect4
-    </a>
+    
     <div>
-        <a>
-            Formulario Registro
-        </a>
-        <br>
-        <br>
+        <header>
+            Connect4
+        </header>
+
+        <h1>Formulario Registro</h1>        
+        
 
         <form action="registro" method="post">
-            <a>Usuario:</a>
-            <input type="text" name="username" required>
+            
+            <input type="text" name="username" placeholder="&#128100; Username" required>
             <br>
-            <a>Contraseña:</a>
-            <input type="password" name="password1" required>
+            
+            <input type="password" name="password1" placeholder="&#128273; Contraseña" required>
             <br>
-            <a>Repite Contraseña</a>
-            <input type="password" name="password2" required>
+
+            <input type="password" name="password2" placeholder="&#128273; Confirmar Contraseña" required>
             <br>
-            <a>Correo:</a>
-            <input type="text" name="email" required>
+            
+            <input type="text" name="email" placeholder="&#9993; Correo" required>
             <br>
-            <input type="submit" name="Crear Cuenta">
+            <input id="enviar" type="submit" name="Crear Cuenta">
         </form>
 
         <a href="login.html">Ya tengo cuenta</a>
