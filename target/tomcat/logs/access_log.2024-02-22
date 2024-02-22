@@ -1,0 +1,16 @@
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:41:11 +0100] "GET /connect4 HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:41:11 +0100] "GET /connect4/ HTTP/1.1" 200 506 http-bio-8080-exec-3 131
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:41:14 +0100] "GET /resources/favicon.ico.png HTTP/1.1" 404 - http-bio-8080-exec-4 0
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:41:31 +0100] "GET /connect4/Inicio.html HTTP/1.1" 200 648 http-bio-8080-exec-5 6
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:41:39 +0100] "GET /connect4/ HTTP/1.1" 200 506 http-bio-8080-exec-6 12
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:41:43 +0100] "GET /connect4/ HTTP/1.1" 200 506 http-bio-8080-exec-7 2
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:42:00 +0100] "GET /connect4 HTTP/1.1" 302 - http-bio-8080-exec-8 0
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:42:03 +0100] "GET /connect4/ HTTP/1.1" 200 506 http-bio-8080-exec-9 11
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:53:46 +0100] "GET /connect4/ HTTP/1.1" 200 572 http-bio-8080-exec-3 13
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:53:46 +0100] "GET /connect4/css/intro.css HTTP/1.1" 200 1002 http-bio-8080-exec-3 13
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:54:03 +0100] "GET /connect4/ HTTP/1.1" 200 572 http-bio-8080-exec-3 6
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:54:03 +0100] "GET /connect4/css/intro.css HTTP/1.1" 200 1002 http-bio-8080-exec-3 2
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:55:32 +0100] "GET /connect4/Inicio.html HTTP/1.1" 200 716 http-bio-8080-exec-8 21
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:55:32 +0100] "GET /connect4/css/intro.css HTTP/1.1" 200 1002 http-bio-8080-exec-8 5
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:55:38 +0100] "GET /connect4/login.html HTTP/1.1" 200 818 http-bio-8080-exec-8 13
+0:0:0:0:0:0:0:1 - - [22/Feb/2024:13:55:38 +0100] "GET /connect4/css/formularios.css HTTP/1.1" 200 1282 http-bio-8080-exec-8 5

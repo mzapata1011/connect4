@@ -25,11 +25,6 @@ public class RefreshSocket {
         System.out.println("WebSocket connection opened. ID:"+session.getId());
         sessions.put(session.getId(), session); // Add session to the map
 
-        // session.getUserProperties().put("gameId",gameId);
-        // juegos.put(gameId, session.getId());
-        // System.out.println("Juegos: "+ juegos.toString());
-
-
     }
 
     @OnClose
