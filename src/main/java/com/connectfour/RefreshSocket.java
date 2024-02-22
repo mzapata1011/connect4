@@ -50,14 +50,14 @@ public class RefreshSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        // recibo el mensaje de la partida que esta jugado el usuario y la junto al json de juegos
+        
         try {
             System.out.println("Message received: " + message);
         
             if( message.contains("Partida:")){
                 session.getBasicRemote().sendText("Received your message: " + message);
                 message=message.substring("Partida:".length());
-                juegos.put(session.getId(),message); // mando refresh a los sockets con esta partida abierta
+                juegos.put(session.getId(),message); // Refresh to the rival socket
                 System.out.println("Los juegos con socket abiertos son: "+juegos.toString());
                 messageRival(juegos.get(session.getId()), session.getId(), "llego rival");
 

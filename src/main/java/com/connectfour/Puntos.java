@@ -60,11 +60,11 @@ public class Puntos {
     /**
      * cuenta los puntos en todo el mapa
      * @return puntos [][]
-     * puntos [0] son los puntos del jugador 1
-     * puntos[1] son los ppuntos del jugador 2
-     * puntos [][0] puntos en horizontal
-     * puntos [][1] puntos en vertical
-     * puntos [][2] puntos en diagonal
+     * puntos [0]: player 1 points      
+     *  puntos[1]: player 2 points 
+     * puntos [][0]: horizontal points 
+     * puntos [][1] vertical points
+     * puntos [][2] diagonal points
      */
     public int [][] contadorPuntos(){
         System.out.println("estamos contando los puntos");
@@ -86,8 +86,6 @@ public class Puntos {
                     int jugador= this.Mapa.get(casilla).equals("red") ? 1 : 0;
                     int direccion= camino==1?0:camino==6?1:2;
                     puntos[jugador][direccion]++;
-                    // rojos += this.Mapa.get(casilla).equals("red") ? 1 : 0;
-                    // azules += this.Mapa.get(casilla).equals("blue") ? 1 : 0;
                 }    
  
                 

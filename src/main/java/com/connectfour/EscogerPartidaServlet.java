@@ -6,8 +6,12 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
+/**
+ * We create a HTML based on the started games made of the user
+ */
 @WebServlet("/startedGames")
 public class EscogerPartidaServlet extends HttpServlet {
+
 
   public void doGet(HttpServletRequest req, HttpServletResponse res)
     throws IOException, ServletException {
@@ -34,17 +38,18 @@ public class EscogerPartidaServlet extends HttpServlet {
       st = con.createStatement();
       st2 = con.createStatement();
 
-      //Primero vemos la tabla de usuarios para obtener el ID
+      // User table based on id
       SQL ="SELECT * FROM users WHERE username = '" + username +"'";
       rs=st.executeQuery(SQL);
       rs.next();
       idUser = rs.getInt("user_id");
 
-      //Segundo comprobamos las partidas activas del usuario
+      //Active games of the user
       SQL2="SELECT * FROM games WHERE (player_one = "+ idUser +" AND player_two IS NOT NULL AND active = 1) OR (player_two = "+ idUser + " AND player_one IS NOT NULL AND active = 1)";        
       rs2 = st2.executeQuery(SQL2);
 
-      //Empezamos el codigo para el html
+
+      //html code
       out = res.getWriter();
       res.setContentType("text/html");
       out.println("<!DOCTYPE html>");
@@ -56,14 +61,15 @@ public class EscogerPartidaServlet extends HttpServlet {
       out.println("<title>Conect4</title></head>");
       out.println("<body>");
 
-      //Resto del html se irá creando según los resultados obtenidos en las consultas SQL
+
+      //HTML depending on the user
       if (rs2.next()) {
 
         out.println("<header><h1>Conect4</h1></header>");
         out.println("<br><div>");
         out.println("<a>Seleccione una partida</a>");
 
-        //Generacion listado partidas
+        //List of games
         do{
 
           st3 = con.createStatement();
@@ -91,7 +97,7 @@ public class EscogerPartidaServlet extends HttpServlet {
         out.println("</a></div>");
 
       } else {
-        //Caso donde no tienes partidas activas
+        //No active games
         out.println("<div>");
         out.println("<h1>No tienes partidas activas en este momento.</h1>");
         out.println("<br><p>Para crear una nueva partida pulse ");
