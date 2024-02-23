@@ -19,9 +19,9 @@ public class PartidaServlet extends HttpServlet {
     HttpServletRequest request,
     HttpServletResponse response
   ) throws ServletException, IOException {
-    Connection con;
-    ResultSet rs;
-    Statement st;
+    Connection con = null;
+    ResultSet rs = null;
+    PreparedStatement st = null;
     String SQL;
     PrintWriter out = response.getWriter();
     try {
@@ -41,11 +41,7 @@ public class PartidaServlet extends HttpServlet {
       HttpSession session = request.getSession(true);
       int numero = (Integer) session.getAttribute("GameId");
       String username = (String) session.getAttribute("sessionUser");
-
-
-      st = con.createStatement();
       
-
       SQL =
         "SELECT b.number,u3.username AS jugador, u1.username AS jugador_uno, u2.username AS jugador_dos , g.turn,u1.user_id as J1_ID, u2.user_id AS J2_ID " +
         "FROM games g " +
@@ -53,10 +49,11 @@ public class PartidaServlet extends HttpServlet {
         "LEFT JOIN users u1 ON g.player_one = u1.user_id " +
         "LEFT JOIN users u2 ON g.player_two = u2.user_id " +
         "LEFT JOIN users u3 ON b.player = u3.user_id " +
-        "WHERE g.game_id =" +
-        numero +
+        "WHERE g.game_id = ?" +
         " GROUP BY b.number ";
-      rs = st.executeQuery(SQL);
+      st=con.prepareStatement(SQL);
+      st.setInt(1,numero);
+      rs = st.executeQuery();
 
       JSONObject enviar = new JSONObject();
       HashMap<Integer, String> mapa = new HashMap<Integer, String>();
@@ -94,10 +91,7 @@ public class PartidaServlet extends HttpServlet {
       response.getWriter().write(enviar.toString());
       //System.out.println("enviamos al cliente: "+enviar.toString());
 
-      out.close();
-      con.close();
-      rs.close();
-      st.close();
+
       
     } catch (JSONException e) {
       e.printStackTrace();
@@ -107,6 +101,17 @@ public class PartidaServlet extends HttpServlet {
     } catch (Exception e) {
       System.out.println("Error closing resources: " + e.getMessage());
       e.printStackTrace();
+    } finally{
+      try {
+        out.close();
+        con.close();
+        rs.close();
+        st.close();
+      } catch (SQLException e) {
+
+        e.printStackTrace();
+      }
+
     }
   }
 }

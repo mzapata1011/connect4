@@ -24,9 +24,8 @@ public class PlayServlet extends HttpServlet {
     Connection con = null;
     PreparedStatement psInsert = null;
     PreparedStatement psUpdate = null;
-    PreparedStatement statsStatement=null;
+    PreparedStatement statsStatement=null,st=null;
     ResultSet rs=null;
-    Statement st=null;
     BufferedReader reader = request.getReader();
     StringBuilder jsonBody = new StringBuilder();
     String line,SQL;
@@ -87,26 +86,15 @@ public class PlayServlet extends HttpServlet {
         int ex= psUpdate.executeUpdate();
 
         HashMap<Integer, String> mapa = new HashMap<Integer, String>();
-        SQL="SELECT number,player FROM board WHERE game="+game;
-        st=con.createStatement();
+
+        SQL="SELECT number,player FROM board WHERE game=?";
+        st=con.prepareStatement(SQL);
+        st.setInt(1,game);
         rs=st.executeQuery(SQL);
         while (rs.next()) { 
             String color = rs.getString(2).equals(player) ? "blue" : "red";
             mapa.put(rs.getInt(1), color);
           }
-          
-        // JSONObject Jsonmapa = jsonObject.getJSONObject("mapa");
-        System.out.println(mapa);
-        // Iterator<String> keys = Jsonmapa.keys();
-
-        // //pasamos el mapa a un hashmap
-        // while (keys.hasNext()) {
-        //   String key = keys.next();
-        //   String value = Jsonmapa.getString(key);
-        //   mapa.put(Integer.parseInt(key), value);
-
-
-        // }// fin while has keys
 
         System.out.print("mapa= " + mapa);
         Puntos puntos = new Puntos();
@@ -116,14 +104,6 @@ public class PlayServlet extends HttpServlet {
         System.out.println("Azules tiene: " + Azules + " puntos");
         System.out.print("Rojo tiene: " + rojos + " puntos");
 
-
-
-        // responseData +=
-        //   " Azules tiene: " +
-        //   Azules +
-        //   " puntos, Rojo tiene: " +
-        //   rojos +
-        //   " puntos";
 
           //añadimos los resultados a la tabla de partidas terminadas
           String statsQuery="INSERT into partidasTerminadas (game_id,user_id,result,horizontal,vertical,diagonal)"+ 
@@ -153,9 +133,6 @@ public class PlayServlet extends HttpServlet {
         jsonObject.remove("turnos");
         jsonObject.put("azules",Azules);
         jsonObject.put("rojos",rojos);
-        
-        // RefreshSocket.refreshActiveGame(game+"");
-
       }//fin del if turno==36
         
       

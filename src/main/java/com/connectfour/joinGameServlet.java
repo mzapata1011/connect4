@@ -12,11 +12,11 @@ public class joinGameServlet extends HttpServlet {
   public void doGet(HttpServletRequest req, HttpServletResponse res)
     throws IOException, ServletException {
     
-    Connection con;
-    Statement st,st2;
-    String username,SQL,SQL2;
-    ResultSet rs,rs2;    
-    PrintWriter out;
+    Connection con=null;
+    PreparedStatement st=null;
+    String username,SQL;
+    ResultSet rs = null,rs2=null;    
+    PrintWriter out=null;
     HttpSession session;
     HttpSession GameId = req.getSession(true);
     
@@ -33,16 +33,17 @@ public class joinGameServlet extends HttpServlet {
               ""
             );
 
-            //Miro la info del User
-            st = con.createStatement();
-            SQL ="SELECT * FROM users WHERE username ='"+ username +"'";
-            rs=st.executeQuery(SQL);
+            SQL ="SELECT * FROM users WHERE username =?";
+            st=con.prepareStatement(SQL);
+            st.setString(1, username);
+            rs=st.executeQuery();
             rs.next();
 
             //Selecciono partidas donde player 2 esta vacio y donde player 1 no sea igual al ID del user
-            st2=con.createStatement();
-            SQL2 = "SELECT * FROM games WHERE player_two IS NULL AND player_one != "+rs.getInt("user_id");
-            rs2=st2.executeQuery(SQL2);
+            SQL= "SELECT * FROM games WHERE player_two IS NULL AND player_one !=? ";
+            st=con.prepareStatement(SQL);
+            st.setInt(0, +rs.getInt("user_id"));
+            rs2=st.executeQuery();
 
             out = res.getWriter();
             res.setContentType("text/html");
@@ -51,8 +52,12 @@ public class joinGameServlet extends HttpServlet {
             //Si hay una partida se procede a unirse a la partida y en caso contrario te permite crear una nueva
             if(rs2.next()){
                 GameId.setAttribute("GameId", rs2.getInt("game_id"));
-                SQL="UPDATE games SET player_two =" + rs.getInt("user_id") + " WHERE game_id =" + GameId.getAttribute("GameId");
-                st.executeUpdate(SQL);
+                SQL="UPDATE games SET player_two =?  WHERE game_id = ?" ;
+                st= con.prepareStatement(SQL);
+                st.setInt(1,rs.getInt("user_id"));
+                st.setInt(2,(Integer) GameId.getAttribute("GameId"));
+                st.executeUpdate();
+
 
                 //Redireccionar al tablero/partida
                 res.sendRedirect("partida.html");
@@ -65,18 +70,25 @@ public class joinGameServlet extends HttpServlet {
             }
 
             out.println("</body></html>");
-            out.close();
 
-            st.close();
-            st2.close();            
-            rs.close();
-            rs2.close();            
-            con.close();
 
 
 
         } catch (Exception e) {
             System.out.println("Error: " + e);
+        }finally{
+           
+
+            try {
+                out.close();
+                st.close();
+                rs.close();
+                rs2.close();            
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }           
+
         }
 
     }

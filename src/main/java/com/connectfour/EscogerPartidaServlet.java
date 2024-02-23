@@ -17,8 +17,9 @@ public class EscogerPartidaServlet extends HttpServlet {
     throws IOException, ServletException {
     
     Connection con;
-    Statement st,st2,st3;
-    String username,SQL,SQL2,SQL3;
+    // Statement st,st2,st3;
+    PreparedStatement st=null,st2=null,st3=null;
+    String username,SQL;
     ResultSet rs,rs2,rs3;
     PrintWriter out;
     HttpSession session = req.getSession(false);
@@ -35,18 +36,23 @@ public class EscogerPartidaServlet extends HttpServlet {
           "root",
           ""
         );
-      st = con.createStatement();
-      st2 = con.createStatement();
+      // st = con.createStatement();
+      // st2 = con.createStatement();
 
       // User table based on id
-      SQL ="SELECT * FROM users WHERE username = '" + username +"'";
+      SQL ="SELECT * FROM users WHERE username = ?";
+      st=con.prepareStatement(SQL);
+      st.setString(1,username);
       rs=st.executeQuery(SQL);
       rs.next();
       idUser = rs.getInt("user_id");
 
       //Active games of the user
-      SQL2="SELECT * FROM games WHERE (player_one = "+ idUser +" AND player_two IS NOT NULL AND active = 1) OR (player_two = "+ idUser + " AND player_one IS NOT NULL AND active = 1)";        
-      rs2 = st2.executeQuery(SQL2);
+      SQL="SELECT * FROM games WHERE (player_one = ? AND player_two IS NOT NULL AND active = 1) OR (player_two = ?  AND player_one IS NOT NULL AND active = 1)";  
+      st2=con.prepareStatement(SQL);    
+      st2.setInt(1, idUser);  
+      st2.setInt(2, idUser);  
+      rs2 = st2.executeQuery();
 
 
       //html code
@@ -72,18 +78,23 @@ public class EscogerPartidaServlet extends HttpServlet {
         //List of games
         do{
 
-          st3 = con.createStatement();
+          
           //Obtengo el username del player 1
-          SQL3 = "SELECT * FROM users WHERE user_id =" +rs2.getInt("player_one");
-          rs3 = st3.executeQuery(SQL3);
+          SQL = "SELECT * FROM users WHERE user_id =?" ;
+          st3 = con.prepareStatement(SQL);
+          st3.setInt(1,rs2.getInt("player_one"));
+          rs3 = st3.executeQuery();
           rs3.next();
           String player1 = rs3.getString("username");
 
-          //Obtengo el username del player 2
-          SQL3 = "SELECT * FROM users WHERE user_id =" +rs2.getInt("player_two");
-          rs3 = st3.executeQuery(SQL3);
+          // player 2
+          SQL = "SELECT * FROM users WHERE user_id =?" ;
+          st3 = con.prepareStatement(SQL);
+          st3.setInt(1,rs2.getInt("player_two"));
+          rs3 = st3.executeQuery();
           rs3.next();
           String player2 = rs3.getString("username");
+
 
           out.println("<form action='resume' method=POST>");
           out.println("<a>"+ player1 +" VS </a><a>"+ player2 +"</a>");

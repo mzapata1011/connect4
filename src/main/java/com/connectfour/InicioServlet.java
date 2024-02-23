@@ -16,10 +16,10 @@ public class InicioServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-    Connection conexion;
-    Statement statement;
+    Connection conexion = null;
+    PreparedStatement statement = null;
     String SQL;
-    ResultSet rs;
+    ResultSet rs = null;
     JSONObject usuario = new JSONObject();
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -30,7 +30,7 @@ public class InicioServlet extends HttpServlet {
     HttpSession session = request.getSession(true);
 
     String username = (String) session.getAttribute("username");
-    System.out.println("username= "+username);
+    System.out.println("username= " + username);
     if (username == null) {
       session.setAttribute("username", "guest");
       username = (String) session.getAttribute("username");
@@ -42,41 +42,49 @@ public class InicioServlet extends HttpServlet {
             "root",
             ""
           );
-        statement = conexion.createStatement();
-        
-        SQL = "SELECT game_id, player_one, player_two, turn " +
-        "FROM games " +
-        "INNER JOIN users ON (player_one = user_id) OR (player_two = user_id) " +
-        "WHERE username = '" + username + "'";
 
+        SQL =
+          "SELECT game_id, player_one, player_two, turn " +
+          "FROM games " +
+          "INNER JOIN users ON (player_one = user_id) OR (player_two = user_id) " +
+          "WHERE username = ?";
+        statement = conexion.prepareStatement(SQL);
+        statement.setString(1, username);
         rs = statement.executeQuery(SQL);
         ArrayList<Integer> partidas = new ArrayList<Integer>();
         ArrayList<Boolean> turnos = new ArrayList<Boolean>();
-        
 
-        while(rs.next()){
+        while (rs.next()) {
           partidas.add(rs.getInt(1));
-          boolean condition = (rs.getString(2).equals("1")) ? (rs.getInt(4) == 1) : (rs.getInt(4) == 0);
+          boolean condition = (rs.getString(2).equals("1"))
+            ? (rs.getInt(4) == 1)
+            : (rs.getInt(4) == 0);
           turnos.add(condition);
         }
         System.out.print("partidas: ");
         System.out.println(partidas);
         System.out.print("turnos: ");
         System.out.println(turnos);
-        
-        usuario.put("partidas",partidas);
-        usuario.put("turno",turnos);
 
+        usuario.put("partidas", partidas);
+        usuario.put("turno", turnos);
+        usuario.put("username", username);
+        System.out.print("USUARIO: ");
+        System.out.println(usuario);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("ASCII");
+        response.getWriter().write(usuario.toString());
       } catch (Exception e) {
-
         System.out.println(e);
+      } finally {
+        try {
+          if (statement != null) statement.close();
+          if (rs != null) rs.close();
+          if (conexion != null) conexion.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
       }
     }
-    usuario.put("username", username);
-    System.out.print("USUARIO: ");
-    System.out.println(usuario);
-    response.setContentType("application/json");
-    response.setCharacterEncoding("ASCII");
-    response.getWriter().write(usuario.toString());
   }
 }

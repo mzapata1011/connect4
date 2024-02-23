@@ -11,16 +11,15 @@ public class loginServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest req, HttpServletResponse res)
     throws IOException, ServletException {
-    
-    Connection con;
-    Statement st;
-    String username,password;
-    ResultSet rs;
-    PrintWriter out;
+    Connection con = null;
+    Statement st = null;
+    String username, password;
+    ResultSet rs = null;
+    PrintWriter out = null;
     HttpSession session = req.getSession(true);
 
-   username = req.getParameter("username");
-   password = req.getParameter("password");
+    username = req.getParameter("username");
+    password = req.getParameter("password");
 
     System.out.println("Password = " + password);
     System.out.println("Username = " + username);
@@ -32,8 +31,10 @@ public class loginServlet extends HttpServlet {
           ""
         );
       st = con.createStatement();
-      
-      PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND pwd = ?");
+
+      PreparedStatement ps = con.prepareStatement(
+        "SELECT * FROM users WHERE username = ? AND pwd = ?"
+      );
       ps.setString(1, username);
       ps.setString(2, PasswordHash.hashPassword(password));
       rs = ps.executeQuery();
@@ -42,31 +43,28 @@ public class loginServlet extends HttpServlet {
       res.setContentType("text/html");
       out.println("<html><body>");
 
-      
       if (!rs.next()) {
-
         //Error en el login
         res.sendRedirect("errorLogin.html");
-
       } else {
-
-        // Login sucessfull        
-       session.setAttribute("sessionUser",username);
-       session.setAttribute("sessionUser_id", rs.getString(1));
-       res.sendRedirect("menu.html");
-        
+        // Login sucessfull
+        session.setAttribute("sessionUser", username);
+        session.setAttribute("sessionUser_id", rs.getString(1));
+        res.sendRedirect("menu.html");
       }
 
       out.println("</body></html>");
-      out.close();
-      rs.close();
-      st.close();
-      con.close();
-
     } catch (Exception e) {
       System.out.println("Error: " + e);
+    } finally {
+      try {
+        out.close();
+        if (st != null) st.close();
+        if (rs != null) rs.close();
+        if (con != null) con.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
   }
-
- 
 }

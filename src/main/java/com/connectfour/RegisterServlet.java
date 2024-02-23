@@ -15,11 +15,11 @@ public class RegisterServlet extends HttpServlet {
 
       
 
-    Connection con;
-    Statement st;
+    Connection con=null;
+    PreparedStatement st=null;
     String SQL,username,password1,password2,email;
-    ResultSet rs,rs1;
-    PrintWriter out;
+    ResultSet rs=null ,rs1=null;
+    PrintWriter out= null;
     HttpSession session = req.getSession(true);
 
    username = req.getParameter("username");
@@ -40,15 +40,13 @@ public class RegisterServlet extends HttpServlet {
           "root",
           ""
         );
-      st = con.createStatement();
 
       SQL =
-        "SELECT * FROM users WHERE username = '" +
-        username +       
-        "' OR email = '" +
-        email + "'";
-        
-      rs = st.executeQuery(SQL);
+        "SELECT * FROM users WHERE username =?  OR email =?";
+      st=con.prepareStatement(SQL);
+      st.setString(1, username);
+      st.setString(2, email);
+      rs = st.executeQuery();
       out = res.getWriter();
       res.setContentType("text/html");
       out.println("<html><body>");
@@ -62,8 +60,12 @@ public class RegisterServlet extends HttpServlet {
         
       }else{
         password1= PasswordHash.hashPassword(password2);
-        SQL = "INSERT INTO users (username,pwd,email) VALUES ('"+ username +"','"+ password1 +"' , '" + email +"')";
-        st.executeUpdate(SQL);
+        SQL = "INSERT INTO users (username,pwd,email) VALUES (?,?,?)";
+        st=con.prepareStatement(SQL);
+        st.setString(1,username);
+        st.setString(2,password1);
+        st.setString(3,email);
+        st.executeUpdate();
         session.setAttribute("sessionUser",username);
         
         SQL="SELECT user_id FROM users WHERE username = '" +
@@ -75,13 +77,20 @@ public class RegisterServlet extends HttpServlet {
       }
       res.sendRedirect("menu.html");
       out.println("</body></html>");
-      out.close();
-      rs.close();
-      st.close();
-      con.close();
+
 
     } catch (Exception e) {
       System.out.println("Error: " + e);
+    } finally {
+      try {
+        out.close();
+        rs.close();
+        st.close();
+        con.close();
+      }catch(SQLException e){
+        e.printStackTrace();
+
+      }
     }
   }
 
